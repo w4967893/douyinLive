@@ -49,12 +49,26 @@ func main() {
 		panic("抖音链接失败:" + err.Error())
 	}
 
+	//命令行启动
+	//CommandStart()
+
+	//todo 可以改为一个ws的方式
 	http.HandleFunc("/start", handleStartService)
 	http.HandleFunc("/stop", handleStopService)
 
 	log.Println("Starting server on :8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		panic(err)
+	}
+}
+
+// 直接启动
+func CommandStart() {
+	if !serviceRunning {
+		startService()
+		log.Println("Service started successfully.")
+	} else {
+		log.Println("Service is already running.")
 	}
 }
 
