@@ -177,7 +177,7 @@ func (d *DouyinLive) Close() {
 }
 
 // 开始运行
-func (d *DouyinLive) Start() {
+func (d *DouyinLive) Start(liveId int) {
 	var err error
 	d.wssurl = d.StitchUrl()
 	d.headers.Add("user-agent", d.userAgent)
@@ -245,7 +245,7 @@ func (d *DouyinLive) Start() {
 							continue
 						}
 					}
-					d.ProcessingMessage(response)
+					d.ProcessingMessage(response, liveId)
 				}
 			}
 		}
@@ -260,7 +260,7 @@ func (d *DouyinLive) emit(eventData *douyin.Message) {
 }
 
 // ProcessingMessage 处理消息
-func (d *DouyinLive) ProcessingMessage(response *douyin.Response) {
+func (d *DouyinLive) ProcessingMessage(response *douyin.Response, liveId int) {
 	for _, data := range response.MessagesList {
 		d.emit(data)
 		method := data.Method
@@ -288,7 +288,7 @@ func (d *DouyinLive) ProcessingMessage(response *douyin.Response) {
 				continue
 			}
 			roomId, _ := strconv.Atoi(config.Conf.RoomNumber)
-			model.InsertComments(roomId, int(msg.User.Id), filterMessage)
+			model.InsertComments(liveId, roomId, int(msg.User.Id), filterMessage)
 		case "WebcastGiftMessage":
 			//msg := &douyin.GiftMessage{}
 			//proto.Unmarshal(data.Payload, msg)
