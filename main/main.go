@@ -64,7 +64,9 @@ func main() {
 	CommandStart(liveId)
 
 	//todo 可以改为一个ws的方式
-	//http.HandleFunc("/start", handleStartService)
+	//http.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
+	//	handleStartService(w, liveId)
+	//})
 	//http.HandleFunc("/stop", handleStopService)
 	//
 	//log.Println("Starting server on :8080")
@@ -84,7 +86,7 @@ func CommandStart(liveId int) {
 }
 
 // 处理启动服务的请求
-func handleStartService(w http.ResponseWriter, r *http.Request, liveId int) {
+func handleStartService(w http.ResponseWriter, liveId int) {
 	if !serviceRunning {
 		startService(liveId)
 		w.WriteHeader(http.StatusOK)
